@@ -15,10 +15,9 @@ void GetWeight(float weight[]);
 void CreatHuffmanTree(HuffmanTree HT[],float weight[]);
 void GetCode(HuffmanTree *HT,char Code[][N]);
 void Select(HuffmanTree *HT,int n,int *min1,int *min2);
-void HuffmanEncode(char Code[][N]);
+void HuffmanEncode(char Code[][N],float weight[]);
 void HuffmanDecode(HuffmanTree *HT);
 void Menu(HuffmanTree *HT,float weight[],char Code[][N]);
-void PrintTree(HuffmanTree *HT);
 void PrintCode(float weight[],char Code[][N]);
 
 int main()
@@ -156,7 +155,7 @@ void GetCode(HuffmanTree *HT,char Code[][N])
 }
 
 
-void HuffmanEncode(char Code[][N])
+void HuffmanEncode(char Code[][N],float weight[])
 {
 	char ch;
 
@@ -164,6 +163,7 @@ void HuffmanEncode(char Code[][N])
 	printf("请输入需要编码的字符串:\n");
 	while((ch=getchar())!='\n')
 	{
+		if(weight[ch-'a'+1]==0)continue;
 		if(ch>='a'&&ch<='z')
 			printf("%s",Code[ch-'a'+1]);
 		else if(ch>='A'&&ch<='Z')
@@ -203,31 +203,28 @@ void Menu(HuffmanTree *HT,float weight[],char Code[][N])
 	while(1)
 	{
 	    printf("\n\n\n");
-	    printf("*******************************\n");
-	    printf("*   1：输入字符进行编码       *\n");
-        printf("*   2：输入编码进行解码       *\n");
-        printf("*   3：打印Huffman树          *\n");
-        printf("*   4：打印所有字符编码       *\n");
-        printf("*   5：退出                   *\n");
-        printf("*******************************\n");
-        printf("请选择：  ");
+	    printf("\t\t\t* * * * * * * * * * * * * * * * *\n");
+	    printf("\t\t\t*      1：输入字符进行编码      *\n");
+        printf("\t\t\t*      2：输入编码进行解码      *\n");
+        printf("\t\t\t*      3：打印所有字符编码      *\n");
+        printf("\t\t\t*      4：退出                  *\n");
+        printf("\t\t\t* * * * * * * * * * * * * * * * *\n");
+        printf("\t\t\t请选择：  ");
 		scanf("%c",&choose);
 		fflush(stdin);
+		printf("\n\n\n");
 		switch(choose)
 		{
 		case '1':
-			HuffmanEncode(Code);
+			HuffmanEncode(Code,weight);
 			break;
 		case '2':
 			HuffmanDecode(HT);
 			break;
 		case '3':
-			PrintTree(HT);
-			break;
-        case '4':
             PrintCode(weight,Code);
             break;
-        case '5':
+        case '4':
             exit(0);
 		default:
 			printf("输入有误，请重新输入\n");
@@ -236,25 +233,18 @@ void Menu(HuffmanTree *HT,float weight[],char Code[][N])
 	}
 }
 
-void PrintTree(HuffmanTree *HT)
-{
-    int i;
 
-	printf("节点   权重  双亲  左孩子  右孩子\n");
-	for(i=1;i<M;i++)
-	{
-		printf("%2d： %6.2f   %02d    %02d      %02d\n",i,HT[i].weight,HT[i].parent,HT[i].lchild,HT[i].rchild);
-	}
-	printf("\n\n");
-}
+
+
 void PrintCode(float weight[],char Code[][N])
 {
     int i;
 
-    printf("字符    权重    编码\n");
+    printf("\t\t\t字符    权重    编码\n");
 	for(i=1;i<N;i++)
 	{
-		printf("%c:     %5.2f    %s\n",i+64,weight[i],Code[i]);
+		if(weight[i]==0)continue;
+		printf("\t\t\t%c:     %5.2f    %s\n",i+64,weight[i],Code[i]);
 	}
 	printf("\n\n");
 }
